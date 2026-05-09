@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Esperanza Quindío</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet.js (para el mapa) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        #map { 
+            height: 75vh; 
+            width: 100%;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-lg */
+            z-index: 10;
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            background: #f9fafb; /* gray-50 */
+        }
+        .leaflet-popup-content {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 280px !important;
+        }
+        .custom-popup-header {
+            padding: 12px 16px;
+        }
+        .custom-popup-header .category {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        .custom-popup-header .description {
+            font-size: 0.875rem;
+            color: #4B5563; /* gray-600 */
+        }
+        .custom-popup-evidence {
+            padding: 0 16px 16px 16px;
+        }
+        .custom-popup-evidence .evidence-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #6B7280; /* gray-500 */
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .evidence-grid img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #E5E7EB; /* gray-200 */
+        }
+        .evidence-grid .label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 4px;
+        }
+        .video-thumbnail {
+            position: relative;
+            cursor: pointer;
+        }
+        .video-thumbnail .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        .video-thumbnail:hover .play-icon {
+            background-color: rgba(234, 179, 8, 0.8); /* yellow-500 */
+        }
+        .hero-bg {
+             background-color: #172554;
+             background-image: linear-gradient(to bottom right, #1e40af, #172554);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="hero-bg text-white">
+        <div class="container mx-auto px-6 py-20 text-center">
+            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wide">Tu Voz, Tu Ciudad</h1>
+            <p class="mt-4 text-lg md:text-xl font-light max-w-3xl mx-auto text-blue-200">El cambio en el Quindío empieza cuando te escuchamos. Señala en el mapa los problemas de tu barrio y ayúdanos a construir las soluciones que necesitas.</p>
+            <a href="#map-section" class="mt-8 inline-block bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                📍 Ver el Mapa y Participar
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <section id="how-it-works" class="mb-20 bg-white p-8 md:p-12 rounded-xl shadow-lg">
+            <div class="text-center">
+                 <h2 class="text-3xl font-bold text-blue-800">De la Queja a la Acción</h2>
+                 <p class="mt-2 max-w-2xl mx-auto text-gray-600">Creamos una herramienta para que tu voz se transforme en un logro para toda la comunidad.</p>
+            </div>
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="bg-blue-100 text-blue-700 rounded-full h-16 w-16 flex items-center justify-center font-bold text-2xl">1</div>
+                    <h3 class="font-bold mt-4 text-xl">Reportas el Problema</h3>
+                    <p class="text-gray-600 mt-1">Haces clic en el mapa y nos cuentas qué necesita tu barrio.</p>
+                </div>
+                 <div class="flex flex-col items-center">
+                    <div class="bg-blue-100 text-blue-700 rounded-full h-16 w-16 flex items-center justify-center font-bold text-2xl">2</div>
+                    <h3 class="font-bold mt-4 text-xl">Gestionamos la Solución</h3>
+                    <p class="text-gray-600 mt-1">El equipo de MIRA usa tu reporte para gestionar y hacer realidad la solución.</p>
+                </div>
+                 <div class="flex flex-col items-center">
+                    <div class="bg-blue-100 text-blue-700 rounded-full h-16 w-16 flex items-center justify-center font-bold text-2xl">3</div>
+                    <h3 class="font-bold mt-4 text-xl">Ves el Logro</h3>
+                    <p class="text-gray-600 mt-1">Mostramos en el mapa la evidencia del trabajo hecho. ¡Hechos, no palabras!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="map-section" class="py-10">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl font-extrabold text-gray-900">Mapa de Esperanza Quindío</h2>
+                <p class="mt-2 text-lg text-gray-600">Explora los logros alcanzados y reporta un nuevo problema para que lo solucionemos juntos.</p>
+            </div>
+            
+            <div class="relative">
+                <div id="map"></div>
+                <div id="legend" class="absolute top-3 right-3 z-20 bg-white bg-opacity-90 p-3 rounded-lg shadow-md text-xs md:text-sm">
+                    <h3 class="font-bold mb-2 text-gray-800">Categorías</h3>
+                    <ul class="space-y-1">
+                        <li class="flex items-center"><span class="h-3 w-3 rounded-full bg-red-500 mr-2"></span> Seguridad</li>
+                        <li class="flex items-center"><span class="h-3 w-3 rounded-full bg-green-500 mr-2"></span> Espacio Público</li>
+                        <li class="flex items-center"><span class="h-3 w-3 rounded-full bg-yellow-500 mr-2"></span> Transporte</li>
+                        <li class="flex items-center"><span class="h-3 w-3 rounded-full bg-indigo-500 mr-2"></span> Adulto Mayor</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-6">
+        <p class="font-bold">MIRA</p>
+        <p class="text-sm text-gray-400">Transformando la política con acciones concretas.</p>
+    </footer>
+
+    <!-- Modals (se mantienen igual en funcionalidad) -->
+    <div id="report-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl p-8 m-4 max-w-lg w-full transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Reporta una Incidencia</h2>
+                <button id="close-modal-button" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            </div>
+            <form id="report-form">
+                 <div class="mb-4">
+                    <label for="category" class="block text-gray-700 font-bold mb-2">Categoría:</label>
+                    <select id="category" name="category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <option value="seguridad">Seguridad</option>
+                        <option value="espacio-publico">Espacio Público</option>
+                        <option value="transporte">Transporte</option>
+                        <option value="adulto-mayor">Adulto Mayor</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label for="description" class="block text-gray-700 font-bold mb-2">Describe el problema:</label>
+                    <textarea id="description" name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ej: Falta de iluminación en el parque del barrio..." required></textarea>
+                </div>
+                <input type="hidden" id="lat" name="lat">
+                <input type="hidden" id="lng" name="lng">
+                <div class="text-right">
+                    <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300">
+                        Enviar Reporte
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="success-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+         <div class="bg-white rounded-xl shadow-2xl p-8 m-4 max-w-sm w-full text-center">
+             <div class="mx-auto bg-green-100 rounded-full h-20 w-20 flex items-center justify-center mb-4">
+                <span class="text-5xl">✅</span>
+             </div>
+             <h2 class="text-2xl font-bold text-gray-900 mb-2">¡Gracias!</h2>
+             <p class="text-gray-600">Tu reporte ha sido enviado con éxito. Lo analizaremos para convertirlo en un futuro logro.</p>
+             <button id="close-success-button" class="mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-lg">Cerrar</button>
+         </div>
+    </div>
+
+    <script>
+        // --- INICIALIZACIÓN DEL MAPA ---
+        const map = L.map('map').setView([4.5339, -75.6811], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // --- DATOS DE LOGROS CON EVIDENCIA (SIMULACIÓN) ---
+        const initialReports = [
+            { 
+                lat: 4.5360, lng: -75.6710, 
+                category: 'transporte', 
+                description: 'El puente peatonal del barrio La Patria estaba en mal estado, representando un peligro para la comunidad.', 
+                evidenceType: 'image',
+                beforeImageUrl: 'https://placehold.co/400x300/F87171/FFFFFF?text=Puente+en+Mal+Estado',
+                afterImageUrl: 'https://placehold.co/400x300/4ADE80/FFFFFF?text=Puente+Renovado',
+            },
+            { 
+                lat: 4.5510, lng: -75.6580, 
+                category: 'espacio-publico',
+                description: 'El parque del barrio Los Quindos estaba abandonado, sin juegos infantiles ni iluminación.', 
+                evidenceType: 'image',
+                beforeImageUrl: 'https://placehold.co/400x300/FBBF24/FFFFFF?text=Parque+Abandonado',
+                afterImageUrl: 'https://placehold.co/400x300/34D399/FFFFFF?text=Parque+Recuperado',
+            },
+            { 
+                lat: 4.5300, lng: -75.6650, 
+                category: 'adulto-mayor', 
+                description: 'Los abuelos de la Comuna 3 no tenían un espacio digno para sus actividades y reuniones.', 
+                evidenceType: 'video',
+                videoThumbnailUrl: 'https://placehold.co/600x400/6366F1/FFFFFF?text=Video+Testimonial%0A%28Haz+Clic%29',
+                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' // Ejemplo, se puede cambiar
+            }
+        ];
+        
+        const categories = {
+            seguridad: { color: 'red-500', name: 'Seguridad', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z"></path>' },
+            'espacio-publico': { color: 'green-500', name: 'Espacio Público', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path>' },
+            transporte: { color: 'yellow-500', name: 'Transporte', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-8.25V15m-3 0h3M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-9h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"></path>' },
+            'adulto-mayor': { color: 'indigo-500', name: 'Adulto Mayor', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.964c.376-.02.752-.032 1.128-.032h1.872c.376 0 .752.012 1.128.032M3 18.72a9.094 9.094 0 013.741-.479 3 3 0 01-4.682-2.72M12 12.75a3 3 0 100-6 3 3 0 000 6z"></path>' },
+             otro: { color: 'gray-500', name: 'Otro', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />' }
+        };
+
+        function createCustomIcon(category) {
+            const catInfo = categories[category] || categories['otro'];
+            const html = `<div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-${catInfo.color} text-white shadow-lg border-2 border-white"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">${catInfo.icon}</svg></div>`;
+            return L.divIcon({
+                html: html,
+                className: 'bg-transparent border-0',
+                iconSize: [40, 40],
+                iconAnchor: [20, 20]
+            });
+        }
+
+        function addReportToMap(report) {
+            const icon = createCustomIcon(report.category);
+            const marker = L.marker([report.lat, report.lng], { icon: icon }).addTo(map);
+
+            let evidenceHtml = '';
+            if (report.evidenceType === 'image') {
+                evidenceHtml = `
+                    <div class="evidence-grid">
+                        <div>
+                            <img src="${report.beforeImageUrl}" alt="Antes de la gestión">
+                            <p class="label text-red-600">ANTES</p>
+                        </div>
+                        <div>
+                            <img src="${report.afterImageUrl}" alt="Logro Alcanzado">
+                            <p class="label text-green-600">LOGRO ALCANZADO</p>
+                        </div>
+                    </div>`;
+            } else if (report.evidenceType === 'video') {
+                evidenceHtml = `
+                    <div class="video-thumbnail" onclick="playVideo('${report.videoUrl}')">
+                        <img src="${report.videoThumbnailUrl}" alt="Video Testimonial">
+                        <div class="play-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.647c1.295.748 1.295 2.535 0 3.284L7.279 20.99c-1.25.722-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
+                        </div>
+                    </div>`;
+            }
+
+            const popupContent = `
+                <div class="custom-popup-container">
+                    <div class="custom-popup-header">
+                        <div class="category text-${categories[report.category]?.color}">${categories[report.category]?.name || 'Reporte'}</div>
+                        <p class="description">${report.description}</p>
+                    </div>
+                    <div class="custom-popup-evidence">
+                        <h4 class="evidence-title">Evidencia de la Gestión de MIRA</h4>
+                        ${evidenceHtml}
+                    </div>
+                </div>`;
+            marker.bindPopup(popupContent);
+        }
+        
+        function playVideo(url) {
+            alert('Simulación: Abriendo video testimonial. En una versión real, esto abriría un reproductor de video o un enlace a YouTube.');
+            // window.open(url, '_blank'); // Esta línea se podría usar en producción
+        }
+
+        initialReports.forEach(report => addReportToMap(report));
+
+        // --- MANEJO DE MODALES ---
+        const reportModal = document.getElementById('report-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const successModal = document.getElementById('success-modal');
+        const closeSuccessButton = document.getElementById('close-success-button');
+        const form = document.getElementById('report-form');
+        const latInput = document.getElementById('lat');
+        const lngInput = document.getElementById('lng');
+        
+        function openModal() {
+            reportModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                reportModal.classList.add('hidden');
+            }, 300);
+        }
+        
+        map.on('click', function(e) {
+            latInput.value = e.latlng.lat;
+            lngInput.value = e.latlng.lng;
+            openModal();
+        });
+
+        closeModalButton.addEventListener('click', closeModal);
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Lógica para añadir un nuevo reporte (no un logro)
+            const newProblem = {
+                lat: parseFloat(latInput.value),
+                lng: parseFloat(lngInput.value),
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                evidenceType: 'none' // Esto es un nuevo reporte, no un logro con evidencia
+            };
+            // En una app real, esto se enviaría a una base de datos.
+            // Aquí, simplemente cerramos y mostramos éxito.
+            form.reset();
+            closeModal();
+            successModal.classList.remove('hidden');
+        });
+        
+        closeSuccessButton.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

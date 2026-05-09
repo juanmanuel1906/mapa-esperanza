@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quindío Escucha y Actúa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c1427; /* Darker blue background */
+            color: #E0E0E0;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-bg {
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex flex-col justify-center items-center text-center p-4">
+        <div class="bg-black/30 backdrop-blur-sm rounded-2xl p-8 md:p-12">
+            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider text-shadow bg-clip-text flex justify-center items-center">Quindío Escucha y Actúa</h1>
+            <div class="flex justify-center items-center">
+                <p class="mt-4 text-lg md:text-xl max-w-2xl text-blue-200">Una estrategia digital para transformar la apatía en acción y alcanzar la meta de <span class="font-bold text-yellow-400">32,000 votos</span>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- El Desafío Section -->
+    <section class="fade-in-section container mx-auto px-6 py-20 flex flex-col items-center text-center">
+        <span class="text-yellow-400 font-bold">NUESTRO OBJETIVO</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">El Desafío: El 70.9% Silencioso</h2>
+        <p class="max-w-2xl text-blue-200 mb-8">En las elecciones al Senado de 2022, más de 345,000 quindianos aptos para votar no lo hicieron. Nuestra estrategia se enfoca en entender y movilizar a esta mayoría decisiva.</p>
+        <div class="bg-gray-800/50 p-6 rounded-2xl shadow-2xl w-full max-w-4xl">
+             <div class="chart-container">
+                <canvas id="abstencionChart"></canvas>
+            </div>
+            <p class="mt-4 text-sm text-blue-300">Fuente: Datos de la Registraduría Nacional, Elecciones al Senado 2022 en Quindío.</p>
+        </div>
+    </section>
+    
+    <!-- WhatsApp Community Section -->
+    <section class="fade-in-section container mx-auto px-6 py-20">
+        <div class="text-center">
+            <span class="text-yellow-400 font-bold">FASE 1: ATRACCIÓN</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">La Comunidad que Conecta: "Mi Barrio al Instante"</h2>
+            <p class="max-w-3xl mx-auto text-blue-200">Antes de pedir el voto, damos valor. Creamos una red de comunidades de WhatsApp, una para cada comuna, gestionada por nuestros líderes locales para construir confianza desde la base.</p>
+        </div>
+
+        <div class="mt-12 grid md:grid-cols-2 gap-12 items-center">
+            <div class="bg-gray-800/50 p-8 rounded-2xl shadow-2xl">
+                <h3 class="text-2xl font-bold text-white mb-4">El Poder de los Líderes</h3>
+                <p class="text-blue-200">Nuestros líderes en cada comuna son el corazón de la estrategia. Ellos son los administradores del grupo de su zona. No es un bot, es una persona real, un vecino conocido que:</p>
+                <ul class="mt-4 space-y-2 text-blue-200">
+                    <li class="flex items-start"><span class="text-yellow-400 mr-2">✓</span><span>Verifica y comparte información relevante y veraz.</span></li>
+                    <li class="flex items-start"><span class="text-yellow-400 mr-2">✓</span><span>Conoce a los emprendedores y prestadores de servicios de su comunidad.</span></li>
+                    <li class="flex items-start"><span class="text-yellow-400 mr-2">✓</span><span>Filtra el spam y mantiene el grupo como un espacio útil y seguro.</span></li>
+                </ul>
+            </div>
+             <div class="bg-gray-800/50 p-8 rounded-2xl shadow-2xl">
+                <h3 class="text-2xl font-bold text-white mb-4">¿Qué Compartimos? ¡La Vida del Barrio!</h3>
+                <p class="text-blue-200">El grupo es un motor de economía local y servicio comunitario. El líder comparte:</p>
+                <ul class="mt-4 space-y-2 text-blue-200">
+                    <li class="flex items-start"><span class="text-yellow-400 mr-2">✓</span><strong>Emprendimientos:</strong> "¡Vecinos! Les recomiendo las deliciosas empanadas de Doña Gloria en la esquina de la cancha."</li>
+                    <li class="flex items-start"><span class="text-yellow-400 mr-2">✓</span><strong>Servicios:</strong> "Si necesitan un plomero de confianza, Don Carlos de la Manzana 8 es excelente. Aquí su número."</li>
+                    <li class="flex items-start"><span class="text-yellow-400 mr-2">✓</span><strong>Oportunidades de Empleo:</strong> "La panadería del centro busca un nuevo ayudante. Interesados llevar hoja de vida."</li>
+                    <li class="flex items-start"><span class="text-yellow-400 mr-2">✓</span><strong>Alertas Comunitarias:</strong> "Recuerden que mañana hay jornada de vacunación para mascotas en el parque."</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Bridge Section -->
+    <section class="fade-in-section min-h-screen container mx-auto px-6 py-20 flex items-center">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="md:order-2 md:pl-12">
+                <span class="text-yellow-400 font-bold">EL PUENTE</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">De la Confianza a la Acción</h2>
+                <p class="text-blue-200">Una vez que somos una fuente confiable, conectamos un problema comunitario con una invitación directa a nuestra plataforma web, el "Mapa de Esperanza", para que el ciudadano participe en la solución.</p>
+            </div>
+            <div class="md:order-1 bg-gray-800 rounded-2xl p-4 shadow-2xl">
+                <div class="bg-white rounded-xl p-4">
+                    <div class="space-y-3">
+                        <div class="bg-blue-100 p-3 rounded-lg self-start max-w-xs">
+                            <p class="font-bold text-blue-800">Líder Comuna 5</p>
+                            <p class="text-sm text-gray-800">Hola vecinos. Varios me han comentado sobre los huecos en la vía principal. Para que MIRA pueda gestionar la solución, necesitamos que todos reporten el punto exacto en nuestro Mapa de Esperanza. ¡Tu clic hace la diferencia! 👇</p>
+                            <a href="#" class="text-blue-600 font-bold text-sm">mapa-esperanza-quindio.com</a>
+                            <p class="text-xs text-right text-gray-500">11:15 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fase 2 Section -->
+    <section class="fade-in-section container mx-auto px-6 py-20 flex flex-col items-center text-center">
+        <span class="text-yellow-400 font-bold">FASE 2: ACCIÓN</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">"Mapa de Esperanza Quindío"</h2>
+        <p class="max-w-3xl text-blue-200 mb-8">En la plataforma, el ciudadano ve que no está solo. La data recolectada nos muestra las prioridades reales de cada comuna, permitiendo a MIRA enfocar sus esfuerzos de gestión donde más se necesitan.</p>
+        <div class="bg-gray-800/50 p-6 rounded-2xl shadow-2xl w-full max-w-4xl">
+            <h3 class="text-xl font-bold text-white mb-4">Preocupaciones Prioritarias por Comuna</h3>
+             <div class="chart-container">
+                <canvas id="preocupacionesChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center p-8 mt-16">
+        <p class="font-bold text-white">MIRA</p>
+        <p class="text-sm text-blue-300">Un puente entre el ciudadano y la solución.</p>
+    </footer>
+
+    <script>
+        // --- ANIMATIONS ---
+        const sections = document.querySelectorAll('.fade-in-section');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        sections.forEach(section => observer.observe(section));
+
+        // --- CHARTS ---
+        const colorPrimary = '#3B82F6'; // blue-500
+        const colorSecondary = '#1D4ED8'; // blue-700
+        const colorAccent = '#FBBF24'; // yellow-400
+        const colorGray = '#4B5563'; // gray-600
+        const colorText = '#E5E7EB'; // gray-200
+        
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    bodyFont: { size: 14 },
+                    titleFont: { size: 16, weight: 'bold' },
+                    callbacks: {
+                        title: (tooltipItems) => {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            return Array.isArray(label) ? label.join(' ') : label;
+                        }
+                    }
+                }
+            }
+        };
+
+        function wrapLabel(label, maxWidth) {
+            if (label.length <= maxWidth) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine.length > 0) lines.push(currentLine);
+            return lines;
+        }
+
+        // Abstencion Chart
+        const ctxAbstencion = document.getElementById('abstencionChart').getContext('2d');
+        new Chart(ctxAbstencion, {
+            type: 'doughnut',
+            data: {
+                labels: ['Participación Histórica', 'Abstencionismo'],
+                datasets: [{
+                    label: 'Participación Electoral',
+                    data: [30, 70],
+                    backgroundColor: [colorPrimary, colorGray],
+                    borderColor: '#0c1427',
+                    borderWidth: 4,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: colorText, font: { size: 14 } }
+                    },
+                    ...tooltipConfig.plugins
+                },
+                cutout: '60%'
+            }
+        });
+
+        // Preocupaciones Chart
+        const preocupacionesLabels = [
+            'Comuna 1: Centro Histórico', 
+            'Comuna 2: Norte Residencial', 
+            'Comuna 5: Sur-Occidente Popular', 
+            'Comuna 10: Corregimiento El Caimo'
+        ].map(label => wrapLabel(label, 16));
+
+        const ctxPreocupaciones = document.getElementById('preocupacionesChart').getContext('2d');
+        new Chart(ctxPreocupaciones, {
+            type: 'bar',
+            data: {
+                labels: preocupacionesLabels,
+                datasets: [{
+                    label: 'Seguridad',
+                    data: [120, 80, 150, 40],
+                    backgroundColor: colorPrimary,
+                    borderRadius: 4
+                }, {
+                    label: 'Salud',
+                    data: [90, 110, 70, 50],
+                    backgroundColor: colorSecondary,
+                    borderRadius: 4
+                }, {
+                    label: 'Empleo',
+                    data: [140, 60, 100, 30],
+                    backgroundColor: colorAccent,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: colorText, font: { size: 12 } },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: colorText, font: { size: 12 } },
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: colorText, font: { size: 14 } }
+                    },
+                    ...tooltipConfig.plugins
+                }
+            }
+        });
+    </script>
+</body>
+</html>
